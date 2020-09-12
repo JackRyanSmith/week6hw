@@ -1,40 +1,34 @@
-const searchElement = document.querySelector('[data-city-search]')
-const searchBox = new google.maps.places.SearchBox(searchElement)
-searchBox.addListener('places_changed', () => {
-  const place = searchBox.getPlaces()[0]
+const searchInput = document.querySelector('.city-search')
+const searchButton = document.querySelector(".submitButton")
+searchButton.addEventListener('click', () => {
+  const place = searchInput.value
   if (place == null) return
-  const latitude = place.geometry.location.lat()
-  const longitude = place.geometry.location.lng()
-  fetch('/weather', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify({
-      latitude: latitude,
-      longitude: longitude
-    })
-  }).then(res => res.json()).then(data => {
-    setWeatherData(data, place.formatted_address)
-  })
+  // const latitude = place.geometry.location.lat()
+  // const longitude = place.geometry.location.lng()
+  const weatherUrl = `http://api.openweathermap.org/data/2.5/weather?q=${place}&appid=7926e70ed5bbf39fcace34574009f4f7`;
+  fetch(weatherUrl,   
+   
+  ).then(res => res.json()).then(data => {
+    setWeatherData(data, place)
+  console.log(data)
+   })
 })
 
 const icon = new Skycons({ color: '#222' })
-const locationElement = document.querySelector('[data-location]')
+const locationElement = document.querySelector('.location')
 const statusElement = document.querySelector('[data-status]')
-const temperatureElement = document.querySelector('[data-temperature]')
-const precipitationElement = document.querySelector('[data-precipitation]')
-const windElement = document.querySelector('[data-wind]')
-icon.set('icon', 'clear-day')
+const temperatureElement = document.querySelector('.temperature')
+const precipitationElement = document.querySelector('.humidity')
+const windElement = document.querySelector('.wind')
+icon.set('icon', 'Clouds')
 icon.play()
 
 function setWeatherData(data, place) {
   locationElement.textContent = place
-  statusElement.textContent = data.summary
-  temperatureElement.textContent = data.temperature
-  precipitationElement.textContent = `${data.precipProbability * 100}%`
-  windElement.textContent = data.windSpeed
-  icon.set('icon', data.icon)
-  icon.play()
+  // statusElement.textContent = data.summary
+  temperatureElement.textContent = data.main.temp
+  precipitationElement.textContent = `${data.main.humidity} %`
+    windElement.textContent = data.wind.speed
+  //  icon.set('icon', data.icon)
+  //  icon.play()
 }
