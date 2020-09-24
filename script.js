@@ -5,7 +5,7 @@ searchButton.addEventListener('click', () => {
   if (place == null) return
   // const latitude = place.geometry.location.lat()
   // const longitude = place.geometry.location.lng()
-  const weatherUrl = `http://api.openweathermap.org/data/2.5/weather?q=${place}&appid=7926e70ed5bbf39fcace34574009f4f7`;
+  const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${place}&appid=7926e70ed5bbf39fcace34574009f4f7`;
   fetch(weatherUrl,   
    
   ).then(res => res.json()).then(data => {
